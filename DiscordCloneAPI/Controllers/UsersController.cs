@@ -141,6 +141,10 @@ namespace DiscordCloneAPI.Controllers
         [HttpPatch("{UserID}")]
         public async Task<IActionResult> PatchProfile(long UserID, [FromForm]User user)
         {
+            if (UserID != user.UserID)
+            {
+                return BadRequest();
+            }
             //--Read image
             var memoryStream = new MemoryStream();
             user.FormProfilePic.CopyToAsync(memoryStream);

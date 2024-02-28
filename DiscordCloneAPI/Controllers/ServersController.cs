@@ -10,6 +10,7 @@ using Models;
 using DiscordCloneAPI.Utilities.Functions;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Annotations;
+using NuGet.Protocol;
 
 namespace DiscordCloneAPI.Controllers
 {
@@ -93,22 +94,28 @@ namespace DiscordCloneAPI.Controllers
         public async Task<ActionResult<Server>> PostServer([FromForm]Server server)
         {
             //--Read image
-            var memoryStream = new MemoryStream();
-            server.FormServerIcon.CopyToAsync(memoryStream);
-
-            if (memoryStream.Length > 50000000)
+            if (server.FormServerIcon != null)
             {
-                return BadRequest("Image too large");
+                var memoryStream = new MemoryStream();
+                await server.FormServerIcon.CopyToAsync(memoryStream);
+
+                if (memoryStream.Length > 50000000)
+                {
+                    return BadRequest("Image too large");
+                }
+                server.ServerIcon = memoryStream.ToArray();
             }
-            server.ServerIcon = memoryStream.ToArray();
+            
             //---
             Random random = new Random();
 
-            random.NextInt64(0, 9223372036854775807);
-            server.ServerID = random.NextInt64(0, 9223372036854775807) + 1;
-
-            
-
+            server.ServerID = random.NextInt64(0, 9223372036854775807);
+            /*--Mock image*/
+            FileStream stream = new FileStream("A:\\Kodning Git\\DiscordClone\\DiscordCloneAPI\\Controllers\\Image_created_with_a_mobile_phone.png", FileMode.Open, FileAccess.Read);
+            var memStream = new MemoryStream();
+            await stream.CopyToAsync(memStream);
+            server.ServerIcon = memStream.ToArray();
+            /*-----------------------------------------*/
             _context.Servers.Add(server);
 
             try
@@ -196,18 +203,22 @@ namespace DiscordCloneAPI.Controllers
         }
 
         // DELETE: api/Servers/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteServer(Int64 id)
+        [HttpDelete/*("{id}")*/]
+        public async Task<IActionResult> DeleteServer()
         {
-            var server = await _context.Servers.FindAsync(id);
-            if (server == null)
+            //var server = await _context.Servers.FindAsync(id);
+            //if (server == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //_context.Servers.Remove(server);
+            //await _context.SaveChangesAsync();
+            List<Server> x = _uServerMembership.GenerateRandomServers();
+            foreach (Server server in x)
             {
-                return NotFound();
+                await PostServer(server);
             }
-
-            _context.Servers.Remove(server);
-            await _context.SaveChangesAsync();
-
             return NoContent();
         }
 

@@ -16,7 +16,31 @@
     <HorizontalStackLayout>
         <CollectionView x:Name="serversCollection"
             ItemsSource="{Binding Servers}"
-            Margin="20"
+            MinimumWidthRequest="72"            
+            Margin="0"
+            SelectionMode="Single"
+            SelectionChangedCommand="{Binding SelectNoteCommand}"
+            SelectionChangedCommandParameter="{Binding Source={RelativeSource Self}, Path=SelectedItem}">
+
+            <!-- Designate how the collection of items are laid out -->
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
+            </CollectionView.ItemsLayout>
+
+            <!-- Define the appearance of each item in the list -->
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout>
+                        <Button Text="Add" ImageSource="{FontImage Glyph='+', Color=White, Size=55}" />
+                        <!--Label Text="{Binding Date}" FontSize="14" TextColor="Silver"/-->
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <CollectionView x:Name="ChannelsCollection"
+            ItemsSource="{Binding Servers}"
+            MinimumWidthRequest="240"            
+            Margin="0"
             SelectionMode="Single"
             SelectionChangedCommand="{Binding SelectNoteCommand}"
             SelectionChangedCommandParameter="{Binding Source={RelativeSource Self}, Path=SelectedItem}">
@@ -36,13 +60,12 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-        <VerticalStackLayout>
-            
-        </VerticalStackLayout>
+        
         <!-- Display notes in a list -->
         <CollectionView x:Name="notesCollection"
                     ItemsSource="{Binding AllNotes}"
-                    Margin="20"
+                    MinimumWidthRequest="1365"
+                    Margin="0"
                     SelectionMode="Single"
                     SelectionChangedCommand="{Binding SelectNoteCommand}"
                     SelectionChangedCommandParameter="{Binding Source={RelativeSource Self}, Path=SelectedItem}">
@@ -58,6 +81,29 @@
                     <StackLayout>
                         <Label Text="{Binding Text}" FontSize="22"/>
                         <Label Text="{Binding Date}" FontSize="14" TextColor="Silver"/>
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <CollectionView x:Name="membersCollection"
+            ItemsSource="{Binding Servers}"
+            MinimumWidthRequest="244"            
+            Margin="0"
+            SelectionMode="Single"
+            SelectionChangedCommand="{Binding SelectNoteCommand}"
+            SelectionChangedCommandParameter="{Binding Source={RelativeSource Self}, Path=SelectedItem}">
+
+            <!-- Designate how the collection of items are laid out -->
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
+            </CollectionView.ItemsLayout>
+
+            <!-- Define the appearance of each item in the list -->
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout>
+                        <Button Text="Add" ImageSource="{FontImage Glyph='+', Color=White, Size=22}" />
+                        <!--Label Text="{Binding Date}" FontSize="14" TextColor="Silver"/-->
                     </StackLayout>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

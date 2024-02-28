@@ -40,6 +40,30 @@ namespace DiscordCloneAPI.Utilities.Functions
             return serverMembership;
         }
 
+        public List<Server> GenerateRandomServers()
+        {
+            var random = new Random();
+            var servers = new List<Server>();
+
+            for (int i = 0; i < 25; i++)
+            {
+                var server = new Server
+                {
+                    ServerID = random.Next(1, 10000),
+                    OwnerID = random.Next(1, 10000),
+                    ServerName = $"Server{random.Next(1, 10000)}",
+                    FormServerIcon = null,
+                    AFKChannelID = random.Next(1, 10000),
+                    AFKTimeout = random.Next(1, 10000),
+                    ServerRegion = $"Region{random.Next(1, 100)}"
+                };
+
+                servers.Add(server);
+            }
+
+            return servers;
+        }
+
         /// <summary>
         /// <c>PostServerMembership</c> adds a user to a server.
         /// </summary>
