@@ -12,7 +12,7 @@ namespace Models
     [PrimaryKey(nameof(UserID))]
     public class User
     {
-        public Int64 UserID { get; set; }
+        public string UserID { get; set; } //change to long?
         public byte[]? ProfilePic { get; set; }
         [NotMapped]
         public IFormFile? FormProfilePic { get; set; }

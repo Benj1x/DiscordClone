@@ -13,15 +13,15 @@ namespace Models
     [PrimaryKey(nameof(ServerID))]
     public class Server
     {
-        public Int64 ServerID { get; set; }
+        public string ServerID { get; set; }
         [ForeignKey(nameof(OwnerID))]
-        public Int64 OwnerID { get; set; }
+        public string OwnerID { get; set; }
         public string ServerName { get; set; }
         [NotMapped]
         public IFormFile? FormServerIcon { get; set; }
         public byte[]? ServerIcon { get; set; }
         //public Int64[]? Admins { get; set; } = null;
-        public Int64? AFKChannelID { get; set; } = null;
+        public string? AFKChannelID { get; set; } = null;
         public int? AFKTimeout { get; set; } = null;
         public string ServerRegion { get; set; }
         //public Role[] Roles { get; set; }

@@ -22,7 +22,7 @@ namespace DiscordCloneAPI.Utilities.Functions
         /// <returns>A List of <c>ServerMembership</c></returns>
         public async Task<ActionResult<IEnumerable<ServerMembership>>> GetMemberships(long ServerID)
         {
-            return await _context.Memberships.Where(e => e.ServerID == ServerID).ToListAsync();
+            return await _context.Memberships.Where(e => e.ServerID.Equals(ServerID)).ToListAsync();
         }
 
         //Get specific membership
@@ -49,13 +49,13 @@ namespace DiscordCloneAPI.Utilities.Functions
             {
                 var server = new Server
                 {
-                    ServerID = random.Next(1, 10000),
-                    OwnerID = random.Next(1, 10000),
-                    ServerName = $"Server{random.Next(1, 10000)}",
+                    ServerID = Guid.NewGuid().ToString("N"),
+                    OwnerID = Guid.NewGuid().ToString("N"),
+                    ServerName = $"Server{Guid.NewGuid().ToString("N")}",
                     FormServerIcon = null,
-                    AFKChannelID = random.Next(1, 10000),
+                    AFKChannelID = Guid.NewGuid().ToString("N"),
                     AFKTimeout = random.Next(1, 10000),
-                    ServerRegion = $"Region{random.Next(1, 100)}"
+                    ServerRegion = $"Region{Guid.NewGuid().ToString("N")}"
                 };
 
                 servers.Add(server);
@@ -72,10 +72,9 @@ namespace DiscordCloneAPI.Utilities.Functions
         {
             Random random = new Random();
 
-            random.NextInt64(0, 9223372036854775807);
-            serverMembership.RelationID = random.NextInt64(0, 9223372036854775807) + 1;
+            serverMembership.RelationID = Guid.NewGuid().ToString("N");
 
-            if(ServerMembershipExists(serverMembership.UserID, serverMembership.ServerID))
+            if (ServerMembershipExists(serverMembership.UserID, serverMembership.ServerID))
             {
                 return false;
             }
@@ -91,7 +90,7 @@ namespace DiscordCloneAPI.Utilities.Functions
                     while (ServerMembershipIDExists(serverMembership.RelationID))
                     {
                         _context.Memberships.Remove(serverMembership);
-                        serverMembership.RelationID = random.NextInt64(0, 9223372036854775807) + 1;
+                        serverMembership.RelationID = Guid.NewGuid().ToString("N");
                         _context.Memberships.Add(serverMembership);
                     }
                     _context.Memberships.Add(serverMembership);
@@ -112,7 +111,7 @@ namespace DiscordCloneAPI.Utilities.Functions
         /// </summary>
         /// <returns>true if successful, user wasn't found in the server</returns>
         /// <remarks>Add a notify/listen for the server?</remarks>
-        public async Task<bool> DeleteServerMembership(long id)
+        public async Task<bool> DeleteServerMembership(string id)
         {
             var serverMembership = await _context.Memberships.FindAsync(id);
             if (serverMembership == null)
@@ -126,10 +125,10 @@ namespace DiscordCloneAPI.Utilities.Functions
             return true; //Success 
         }
 
-        public async Task<bool> DeleteAllServerMemberships(long ServerID)
+        public async Task<bool> DeleteAllServerMemberships(string ServerID)
         {
    
-            var ServerMembers = _context.Memberships.Where(e => e.ServerID == ServerID);
+            var ServerMembers = _context.Memberships.Where(e => e.ServerID.Equals(ServerID));
             _context.Memberships.RemoveRange(ServerMembers);
             try
             {
@@ -148,19 +147,19 @@ namespace DiscordCloneAPI.Utilities.Functions
         /// </summary>
         /// <returns>true if successful, user wasn't found in the server</returns>
         /// <seealso cref="ServerMembershipExists"/>
-        private bool ServerMembershipIDExists(long RelationID)
+        private bool ServerMembershipIDExists(string RelationID)
         {
-            return _context.Memberships.Any(e => e.RelationID == RelationID);
+            return _context.Memberships.Any(e => e.RelationID.Equals(RelationID));
         }
         /// <summary>
         /// <c>ServerMembershipExists</c> Checks if a user is already in a server
         /// </summary>
         /// <returns>true if found in the server, false if they weren't found in the server</returns>
         /// <seealso cref="ServerMembershipIDExists"/>
-        private bool ServerMembershipExists(long userID, long serverID)
+        private bool ServerMembershipExists(string userID, string serverID)
         {
             //If any relation contains the UserID && ServerID
-            return _context.Memberships.Any(e => e.UserID == userID && e.ServerID == serverID);
+            return _context.Memberships.Any(e => e.UserID.Equals(userID) && e.ServerID.Equals(serverID));
         }
 
     }

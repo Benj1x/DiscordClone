@@ -11,9 +11,9 @@ namespace Models
     [PrimaryKey(nameof(RelationID))]
     public class ServerMembership
     {
-        public Int64 RelationID { get; set; }
-        public Int64 UserID { get; set; }
+        public string RelationID { get; set; }
+        public string UserID { get; set; }
         //[ForeignKey(nameof(ServerID))]
-        public Int64 ServerID { get; set; }
+        public string ServerID { get; set; }
     }
 }

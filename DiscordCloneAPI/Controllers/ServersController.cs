@@ -51,9 +51,9 @@ namespace DiscordCloneAPI.Controllers
         // PUT: api/Servers/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutServer(Int64 id, Server server)
+        public async Task<IActionResult> PutServer(string id, Server server)
         {
-            if (id != server.ServerID)
+            if (server.ServerID.Equals(id))
             {
                 return BadRequest();
             }
@@ -109,7 +109,7 @@ namespace DiscordCloneAPI.Controllers
             //---
             Random random = new Random();
 
-            server.ServerID = random.NextInt64(0, 9223372036854775807);
+            server.ServerID = Guid.NewGuid().ToString("N");
             /*--Mock image*/
             FileStream stream = new FileStream("A:\\Kodning Git\\DiscordClone\\DiscordCloneAPI\\Controllers\\Image_created_with_a_mobile_phone.png", FileMode.Open, FileAccess.Read);
             var memStream = new MemoryStream();
@@ -129,7 +129,7 @@ namespace DiscordCloneAPI.Controllers
                     while (ServerExists(server.ServerID))
                     {
                         _context.Servers.Remove(server);
-                        server.ServerID = random.NextInt64(0, 9223372036854775807) + 1;
+                        server.ServerID = Guid.NewGuid().ToString("N");
                     }
                     _context.Servers.Add(server);
                     await _context.SaveChangesAsync();
@@ -144,7 +144,7 @@ namespace DiscordCloneAPI.Controllers
             ServerMembership serverMembership = new ServerMembership();
             serverMembership.ServerID = server.ServerID;
             serverMembership.UserID = server.OwnerID;
-            serverMembership.RelationID = 0;
+            serverMembership.RelationID = "";
 
             if (!await _uServerMembership.PostServerMembership(serverMembership))
             {
@@ -172,7 +172,7 @@ namespace DiscordCloneAPI.Controllers
             //Owner has changed
             if (patchServer.OwnerID != null && !server.OwnerID.Equals(patchServer.OwnerID))
             {
-                server.OwnerID = (long)patchServer.OwnerID;
+                server.OwnerID = patchServer.OwnerID;
             }
             
             if (patchServer.ServerName != null)
@@ -222,9 +222,9 @@ namespace DiscordCloneAPI.Controllers
             return NoContent();
         }
 
-        private bool ServerExists(Int64 id)
+        private bool ServerExists(string id)
         {
-            return _context.Servers.Any(e => e.ServerID == id);
+            return _context.Servers.Any(e => e.ServerID.Equals(id));
         }
     }
 }

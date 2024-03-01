@@ -30,9 +30,9 @@ namespace DiscordCloneAPI.Controllers
 
         // GET: api/Users/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(long id)
+        public async Task<ActionResult<User>> GetUser(string id)
         {
-            var user = await _context.Users.FindAsync(id);
+            User user = await _context.Users.FirstAsync(user => user.UserID.Equals(id));
 
             if (user == null)
             {
@@ -45,9 +45,9 @@ namespace DiscordCloneAPI.Controllers
         // PUT: api/Users/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(long id, User user)
+        public async Task<IActionResult> PutUser(string id, User user)
         {
-            if (id != user.UserID)
+            if (user.UserID.Equals(id))
             {
                 return BadRequest();
             }
@@ -81,11 +81,7 @@ namespace DiscordCloneAPI.Controllers
         {
 
             //Check if email already exists
-
-            Random random = new Random();
-
-            random.NextInt64(0, 9223372036854775807);
-            user.UserID = random.NextInt64(0, 9223372036854775807) + 1;
+            user.UserID = Guid.NewGuid().ToString("N");
 
 
             _context.Users.Add(user);
@@ -100,7 +96,7 @@ namespace DiscordCloneAPI.Controllers
                     while (UserIdExists(user.UserID))
                     {
                         _context.Users.Remove(user);
-                        user.UserID = random.NextInt64(0, 9223372036854775807) + 1;
+                        user.UserID = Guid.NewGuid().ToString("N");
                     }
                     _context.Users.Add(user);
                     await _context.SaveChangesAsync();
@@ -141,7 +137,7 @@ namespace DiscordCloneAPI.Controllers
         [HttpPatch("{UserID}")]
         public async Task<IActionResult> PatchProfile(long UserID, [FromForm]User user)
         {
-            if (UserID != user.UserID)
+            if (user.UserID.Equals(UserID))
             {
                 return BadRequest();
             }
@@ -179,9 +175,9 @@ namespace DiscordCloneAPI.Controllers
             return NoContent();
         }
 
-        private bool UserIdExists(long id)
+        private bool UserIdExists(string id)
         {
-            return _context.Users.Any(e => e.UserID == id);
+            return _context.Users.Any(e => e.UserID.Equals(id));
         }
         
     }

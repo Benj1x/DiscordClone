@@ -12,9 +12,9 @@ namespace Models
     [PrimaryKey(nameof(MessageID))]
     public class Message
     {
-        public long ChannelID {  get; set; }
-        public long OwnerID { get; set; }
-        public long MessageID { get; set; } //Need something more unique as the PK?? (discord uses ((channelid, bucket), messageid)
+        public string ChannelID {  get; set; }
+        public string OwnerID { get; set; }
+        public string MessageID { get; set; } //Need something more unique as the PK?? (discord uses ((channelid, bucket), messageid)
         public string? MessageContent { get; set; }
         //byte should be some file
         public byte[][]? MessageAttachments { get; set; }

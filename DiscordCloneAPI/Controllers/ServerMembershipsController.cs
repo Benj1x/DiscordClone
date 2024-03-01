@@ -102,7 +102,7 @@ namespace DiscordCloneAPI.Controllers
 
         private bool ServerMembershipExists(long id)
         {
-            return _context.Memberships.Any(e => e.RelationID == id);
+            return _context.Memberships.Any(e => e.RelationID.Equals(id));
         }
     }
 }

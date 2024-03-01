@@ -45,9 +45,9 @@ namespace DiscordCloneAPI.Controllers
         // PUT: api/Messages/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutMessage(long id, Message message)
+        public async Task<IActionResult> PutMessage(string id, Message message)
         {
-            if (id != message.MessageID)
+            if (id.Equals(message.MessageID))
             {
                 return BadRequest();
             }
@@ -78,10 +78,7 @@ namespace DiscordCloneAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Message>> PostMessage([FromForm]Message message)
         {
-            Random random = new Random();
-
-            random.NextInt64(0, 9223372036854775807);
-            message.MessageID = random.NextInt64(0, 9223372036854775807) + 1;
+            message.MessageID = Guid.NewGuid().ToString("N");
 
             var memoryStream = new MemoryStream();
             message.MessageAttachments = new byte[message.FormMessageAttachments.Count()][];
@@ -109,7 +106,7 @@ namespace DiscordCloneAPI.Controllers
                     while (MessageExists(message.MessageID))
                     {
                         _context.Messages.Remove(message);
-                        message.MessageID = random.NextInt64(0, 9223372036854775807) + 1;
+                        message.MessageID = Guid.NewGuid().ToString("N");
                     }
                     _context.Messages.Add(message);
                     await _context.SaveChangesAsync();
@@ -124,7 +121,7 @@ namespace DiscordCloneAPI.Controllers
 
         // DELETE: api/Messages/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteMessage(long id)
+        public async Task<IActionResult> DeleteMessage(string id)
         {
             var message = await _context.Messages.FindAsync(id);
             if (message == null)
@@ -138,9 +135,9 @@ namespace DiscordCloneAPI.Controllers
             return NoContent();
         }
 
-        private bool MessageExists(long id)
+        private bool MessageExists(string id)
         {
-            return _context.Messages.Any(e => e.MessageID == id);
+            return _context.Messages.Any(e => e.MessageID.Equals(id));
         }
     }
 }
