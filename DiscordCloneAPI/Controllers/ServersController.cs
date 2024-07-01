@@ -105,7 +105,14 @@ namespace DiscordCloneAPI.Controllers
                 }
                 server.ServerIcon = memoryStream.ToArray();
             }
-            
+
+            Channel channel = new Channel
+            {
+                ChannelID = Guid.NewGuid().ToString("N"),
+                ChannelName = "SomeName"
+            };
+            server.Channels.Add(channel);
+
             //---
             Random random = new Random();
 

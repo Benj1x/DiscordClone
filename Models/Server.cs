@@ -21,6 +21,7 @@ namespace Models
         public IFormFile? FormServerIcon { get; set; }
         public byte[]? ServerIcon { get; set; }
         //public Int64[]? Admins { get; set; } = null;
+        public List<Channel>? Channels { get; set; } = new List<Channel>();
         public string? AFKChannelID { get; set; } = null;
         public int? AFKTimeout { get; set; } = null;
         public string ServerRegion { get; set; }

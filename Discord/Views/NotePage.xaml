@@ -3,9 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModels="clr-namespace:Discord.ViewModels"
              x:Class="Discord.Views.NotePage"
-             Title="Note">
+             Title="NoteXYZ">
     <ContentPage.BindingContext>
-        <viewModels:NoteViewModel />
+        <viewModels:MessageViewModel />
     </ContentPage.BindingContext>
     <VerticalStackLayout Spacing="10" Margin="5">
         <Editor x:Name="TextEditor"

@@ -1,13 +1,16 @@
+using CommunityToolkit.Mvvm.ComponentModel;
+using Windows.ApplicationModel.VoiceCommands;
+
 namespace Discord.Views;
 
-public partial class AllNotesPage : ContentPage
+public partial class AllMessagesPage : ContentPage
 {
-    public AllNotesPage()
+    public AllMessagesPage()
     {
         InitializeComponent();
     }
     private void ContentPage_NavigatedTo(object sender, NavigatedToEventArgs e)
     {
-        notesCollection.SelectedItem = null;
+        chatCollection.SelectedItem = null;
     }
 }

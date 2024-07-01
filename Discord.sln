@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Discord", "Discord\Discord.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csproj", "{7736C834-3075-4CD4-997B-7C2DF04E4610}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiscordCloneAPI", "DiscordCloneAPI\DiscordCloneAPI.csproj", "{CC9670D9-931F-4AA3-8C13-FE1AAC7C26B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiscordCloneAPI", "DiscordCloneAPI\DiscordCloneAPI.csproj", "{CC9670D9-931F-4AA3-8C13-FE1AAC7C26B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

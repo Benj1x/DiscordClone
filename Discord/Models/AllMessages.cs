@@ -2,28 +2,28 @@
 
 namespace Discord.Models;
 
-internal class AllNotes
+internal class AllMessages
 {
-    public ObservableCollection<Note> Notes { get; set; } = new ObservableCollection<Note>();
+    public ObservableCollection<Message> Messages { get; set; } = new ObservableCollection<Message>();
 
-    public AllNotes() =>
-        LoadNotes();
+    public AllMessages() =>
+        LoadMessages();
 
-    public void LoadNotes()
+    public void LoadMessages()
     {
-        Notes.Clear();
+        Messages.Clear();
 
         // Get the folder where the notes are stored.
         string appDataPath = FileSystem.AppDataDirectory;
 
         // Use Linq extensions to load the *.notes.txt files.
-        IEnumerable<Note> notes = Directory
+        IEnumerable<Message> messages = Directory
 
                                     // Select the file names from the directory
-                                    .EnumerateFiles(appDataPath, "*.notes.txt")
+                                    .EnumerateFiles(appDataPath, "*.messages.txt")
 
                                     // Each file name is used to create a new Note
-                                    .Select(filename => new Note()
+                                    .Select(filename => new Message()
                                     {
                                         Filename = filename,
                                         Text = File.ReadAllText(filename),
@@ -34,7 +34,7 @@ internal class AllNotes
                                     .OrderBy(note => note.Date);
 
         // Add each note into the ObservableCollection
-        foreach (Note note in notes)
-            Notes.Add(note);
+        foreach (Message message in messages)
+            Messages.Add(message);
     }
 }

@@ -6,7 +6,7 @@
         {
             InitializeComponent();
             /* Every page that can be navigated to from another page, needs to be registered with the navigation system.
-             The AllNotesPage and AboutPage pages are automatically registered with the navigation system by being declared in the TabBar.
+             The AllMessagesPage and AboutPage pages are automatically registered with the navigation system by being declared in the TabBar.
               So to register the 'NotePage' we have to manually register the NotesPage with the navigation system:
              */
 

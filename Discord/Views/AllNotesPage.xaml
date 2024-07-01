@@ -2,11 +2,11 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModels="clr-namespace:Discord.ViewModels"
-             x:Class="Discord.Views.AllNotesPage"
+             x:Class="Discord.Views.AllMessagesPage"
              NavigatedTo="ContentPage_NavigatedTo">
 
     <ContentPage.BindingContext>
-        <viewModels:NotesViewModel />
+        <viewModels:ChatViewModel />
     </ContentPage.BindingContext>
     <!-- Add an item to the toolbar -->
     <ContentPage.ToolbarItems>
@@ -16,10 +16,11 @@
     <HorizontalStackLayout>
         <CollectionView x:Name="serversCollection"
             ItemsSource="{Binding Servers}"
+            BackgroundColor="{Binding myServersBackgroundColor}"
             MinimumWidthRequest="72"            
             Margin="0"
             SelectionMode="Single"
-            SelectionChangedCommand="{Binding SelectNoteCommand}"
+            SelectionChangedCommand="{Binding SelectMessageCommand}"
             SelectionChangedCommandParameter="{Binding Source={RelativeSource Self}, Path=SelectedItem}">
 
             <!-- Designate how the collection of items are laid out -->
@@ -37,12 +38,13 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-        <CollectionView x:Name="ChannelsCollection"
+        <CollectionView x:Name="channelsCollection"
             ItemsSource="{Binding Servers}"
             MinimumWidthRequest="240"            
             Margin="0"
             SelectionMode="Single"
-            SelectionChangedCommand="{Binding SelectNoteCommand}"
+            BackgroundColor="{Binding myChannelsBackgroundColor}"
+            SelectionChangedCommand="{Binding SelectMessageCommand}"
             SelectionChangedCommandParameter="{Binding Source={RelativeSource Self}, Path=SelectedItem}">
 
             <!-- Designate how the collection of items are laid out -->
@@ -60,37 +62,49 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-        
+
         <!-- Display notes in a list -->
-        <CollectionView x:Name="notesCollection"
-                    ItemsSource="{Binding AllNotes}"
-                    MinimumWidthRequest="1365"
+        <VerticalStackLayout MaximumWidthRequest="1364" VerticalOptions="EndAndExpand">
+            <CollectionView x:Name="chatCollection"
+                    ItemsSource="{Binding AllMessages}"
+                    MaximumWidthRequest="1364"
+                    MinimumWidthRequest="0"
+                    MinimumHeightRequest="170"
+                    MaximumHeightRequest="10000"
+                    BackgroundColor="{Binding myChatBackgroundColor}"
                     Margin="0"
                     SelectionMode="Single"
-                    SelectionChangedCommand="{Binding SelectNoteCommand}"
-                    SelectionChangedCommandParameter="{Binding Source={RelativeSource Self}, Path=SelectedItem}">
+                    SelectionChangedCommand="{Binding SelectMessageCommand}"
+                    SelectionChangedCommandParameter="{Binding Source={RelativeSource Self}, Path=SelectedItem}" VerticalOptions="CenterAndExpand">
 
-            <!-- Designate how the collection of items are laid out -->
-            <CollectionView.ItemsLayout>
-                <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
-            </CollectionView.ItemsLayout>
+                <!-- Designate how the collection of items are laid out -->
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
+                </CollectionView.ItemsLayout>
 
-            <!-- Define the appearance of each item in the list -->
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <StackLayout>
-                        <Label Text="{Binding Text}" FontSize="22"/>
-                        <Label Text="{Binding Date}" FontSize="14" TextColor="Silver"/>
-                    </StackLayout>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+                <!-- Define the appearance of each item in the list -->
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout>
+                            <Label Text="{Binding Text}" FontSize="22"/>
+                            <Label Text="{Binding Date}" FontSize="14" TextColor="Silver"/>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <BoxView
+                BackgroundColor="{Binding myTextBackgroundColor}"
+                HeightRequest="72"
+                WidthRequest="1364">
+            </BoxView>
+        </VerticalStackLayout>
         <CollectionView x:Name="membersCollection"
             ItemsSource="{Binding Servers}"
-            MinimumWidthRequest="244"            
+            MinimumWidthRequest="244"         
+            BackgroundColor="{Binding myMembersBackgroundColor}"
             Margin="0"
             SelectionMode="Single"
-            SelectionChangedCommand="{Binding SelectNoteCommand}"
+            SelectionChangedCommand="{Binding SelectMessageCommand}"
             SelectionChangedCommandParameter="{Binding Source={RelativeSource Self}, Path=SelectedItem}">
 
             <!-- Designate how the collection of items are laid out -->
@@ -110,5 +124,5 @@
         </CollectionView>
     </HorizontalStackLayout>
 
-    
+
 </ContentPage>

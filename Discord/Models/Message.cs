@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace Discord.Models
 {
-    internal class Note
+    internal class Message
     {
         public string Filename { get; set; }
         public string Text { get; set; }
         public DateTime Date { get; set; }
 
-        public Note()
+        public Message()
         {
-            Filename = $"{Path.GetRandomFileName()}.notes.txt";
+            Filename = $"{Path.GetRandomFileName()}.messages.txt";
             Date = DateTime.Now;
             Text = "";
         }
@@ -25,7 +25,7 @@ namespace Discord.Models
         public void Delete() =>
             File.Delete(System.IO.Path.Combine(FileSystem.AppDataDirectory, Filename));
 
-        public static Note Load(string filename)
+        public static Message Load(string filename)
         {
             filename = System.IO.Path.Combine(FileSystem.AppDataDirectory, filename);
 
@@ -40,7 +40,7 @@ namespace Discord.Models
                     Date = File.GetLastWriteTime(filename)
                 };
         }
-        public static IEnumerable<Note> LoadAll()
+        public static IEnumerable<Message> LoadAll()
         {
             // Get the folder where the notes are stored.
             string appDataPath = FileSystem.AppDataDirectory;
@@ -49,13 +49,13 @@ namespace Discord.Models
             return Directory
 
                     // Select the file names from the directory
-                    .EnumerateFiles(appDataPath, "*.notes.txt")
+                    .EnumerateFiles(appDataPath, "*.messages.txt")
 
                     // Each file name is used to load a note
-                    .Select(filename => Note.Load(Path.GetFileName(filename)))
+                    .Select(filename => Message.Load(Path.GetFileName(filename)))
 
                     // With the final collection of notes, order them by date
-                    .OrderByDescending(note => note.Date);
+                    .OrderByDescending(message => message.Date);
         }
 
     }
