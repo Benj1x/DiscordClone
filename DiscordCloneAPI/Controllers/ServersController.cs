@@ -39,7 +39,8 @@ namespace DiscordCloneAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Server>> GetServer(string id)
         {
-            var server = await _context.Servers.FindAsync(id);
+            var server = await _context.Servers.Include(s => s.Channels)
+                               .FirstOrDefaultAsync(s => s.ServerID == id);
 
             if (server == null)
             {
@@ -128,12 +129,12 @@ namespace DiscordCloneAPI.Controllers
                 server.ServerIcon = memoryStream.ToArray();
             }
 
-            Channel channel = new Channel
-            {
-                ChannelID = Guid.NewGuid().ToString("N"),
-                ChannelName = "SomeName"
-            };
-            server.Channels.Add(channel);
+           // Channel channel = new Channel
+           // {
+           //     ChannelID = Guid.NewGuid().ToString("N"),
+           //     ChannelName = "SomeName"
+           // };
+            //server.Channels.Add(channel);
 
             //---
             Random random = new Random();

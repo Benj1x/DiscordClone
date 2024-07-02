@@ -110,29 +110,30 @@ namespace DiscordCloneAPI.Controllers
             return CreatedAtAction(nameof(GetUser), new { id = user.UserID }, user);
         }
 
-        // POST: api/Users
-        //[HttpPost]
-        //public async Task<ActionResult<UserAuthToken>> LoginUser(string Email, string Password)
-        //{
-        //    var user = await _context.Users.FindAsync(Email);
+       //POST: api/Users
+       [HttpPost("login")]
+        public async Task<ActionResult<string>> LoginUser([FromBody] LoginInfo loginInfo)
+        {
+            var user = _context.Users.Where(u => u.Email.Equals(loginInfo.email)).First();
 
-        //    if (user == null)
-        //    {
-        //        return NotFound();
-        //    }
+            if (user == null)
+            {
+                return NotFound();
+            }
 
-        //    if (!user.Password.Equals(Password))
-        //    {
-        //        return NotFound();
-        //    }
+            if (!user.Password.Equals(loginInfo.password))
+            {
+                return NotFound();
+            }
 
-        //    //Here you'd probably want to do some 2FA
+            //Here you'd probably want to do some 2FA
 
-        //    //Placeholder--------------------------------
-        //    UserAuthToken auth = new UserAuthToken();
-        //    //-------------------------------------------
-        //    return auth;
-        //}
+            //Placeholder--------------------------------
+            //UserAuthToken auth = new();
+            //-------------------------------------------
+            string auth = "Authenticated";
+            return auth;
+        }
 
         [HttpPatch("{UserID}")]
         public async Task<IActionResult> PatchProfile(long UserID, [FromForm]User user)
