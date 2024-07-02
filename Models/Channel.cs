@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Models
 {
-    public class Channel
-    {
-        public string ChannelID { get; set; } = null!;
-        public string ChannelName { get; set; } = null!;
-    }
+    //public class Channel
+    //{
+    //    public string ChannelID { get; set; }
+    //    public string ChannelName { get; set; }
+    //}
 }

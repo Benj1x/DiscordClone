@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using System.Net;
+using System.Threading.Channels;
 using System.Web.Mvc;
 
 namespace DiscordCloneAPI.Utilities.Functions
@@ -47,17 +48,22 @@ namespace DiscordCloneAPI.Utilities.Functions
 
             for (int i = 0; i < 25; i++)
             {
+                Models.Channel channel = new Models.Channel();
+                channel.ChannelID = Guid.NewGuid().ToString("N");
+                channel.ChannelName = "General";
+                
                 var server = new Server
                 {
-                    ServerID = Guid.NewGuid().ToString("N"),
                     OwnerID = Guid.NewGuid().ToString("N"),
                     ServerName = $"Server{Guid.NewGuid().ToString("N")}",
                     FormServerIcon = null,
                     AFKChannelID = Guid.NewGuid().ToString("N"),
                     AFKTimeout = random.Next(1, 10000),
                     ServerRegion = $"Region{Guid.NewGuid().ToString("N")}"
+                    
                 };
-
+                server.Channels.Add(new Models.Channel() { ChannelID = channel.ChannelID, ChannelName = "General"});
+                //server.Channels.Add(channel);
                 servers.Add(server);
             }
 

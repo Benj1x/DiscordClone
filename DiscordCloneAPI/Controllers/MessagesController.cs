@@ -80,20 +80,24 @@ namespace DiscordCloneAPI.Controllers
         {
             message.MessageID = Guid.NewGuid().ToString("N");
 
-            var memoryStream = new MemoryStream();
-            message.MessageAttachments = new byte[message.FormMessageAttachments.Count()][];
-            for (int i = 0; i < message.FormMessageAttachments.Count(); i++)
+            if (message.FormMessageAttachments != null) 
             {
-                await memoryStream.FlushAsync();
-                await message.FormMessageAttachments[i].CopyToAsync(memoryStream);
-                if (memoryStream.Length > 50000000)
+                var memoryStream = new MemoryStream();
+                message.MessageAttachments = new byte[message.FormMessageAttachments.Count()][];
+                for (int i = 0; i < message.FormMessageAttachments.Count(); i++)
                 {
-                    return BadRequest($"Image {i} too large");
+                    await memoryStream.FlushAsync();
+                    await message.FormMessageAttachments[i].CopyToAsync(memoryStream);
+                    if (memoryStream.Length > 50000000)
+                    {
+                        return BadRequest($"Image {i} too large");
+                    }
+                    message.MessageAttachments[i] = new byte[memoryStream.Length];
+                    message.MessageAttachments[i] = memoryStream.ToArray();
                 }
-                message.MessageAttachments[i] = new byte[memoryStream.Length];
-                message.MessageAttachments[i] = memoryStream.ToArray();
+                memoryStream.Dispose();
             }
-            memoryStream.Dispose();
+
             _context.Messages.Add(message);
             try
             {

@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 
 namespace Models
@@ -13,7 +14,7 @@ namespace Models
     [PrimaryKey(nameof(ServerID))]
     public class Server
     {
-        public string ServerID { get; set; }
+        public string ServerID { get; set; } = Guid.NewGuid().ToString("N");
         [ForeignKey(nameof(OwnerID))]
         public string OwnerID { get; set; }
         public string ServerName { get; set; }
@@ -22,10 +23,18 @@ namespace Models
         public byte[]? ServerIcon { get; set; }
         //public Int64[]? Admins { get; set; } = null;
         public List<Channel>? Channels { get; set; } = new List<Channel>();
+
         public string? AFKChannelID { get; set; } = null;
         public int? AFKTimeout { get; set; } = null;
         public string ServerRegion { get; set; }
         //public Role[] Roles { get; set; }
+
+
+    }
+    public class Channel
+    {
+        public string ChannelID { get; set; }
+        public string ChannelName { get; set; }
     }
 }
 

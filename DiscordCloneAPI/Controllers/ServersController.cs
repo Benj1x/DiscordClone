@@ -19,6 +19,7 @@ namespace DiscordCloneAPI.Controllers
     public class ServersController : ControllerBase
     {
         private readonly ServerContext _context;
+        private readonly MessageContext _mssgContext;
         private readonly UServerMembership _uServerMembership;
 
         public ServersController(ServerContext context, UServerMembership uServerMembership)
@@ -45,7 +46,28 @@ namespace DiscordCloneAPI.Controllers
                 return NotFound();
             }
 
+
             return server;
+        }
+        // GET: api/Servers/id/channels/chID
+        [HttpGet("{id}/channels{chID}")]
+        public async Task<ActionResult<IEnumerable<Message>>> GetChannelMessages(string id, string chID)
+        {
+            var server = await _context.Servers.FindAsync(id);
+            
+            if (server == null)
+            {
+                return NotFound();
+            }
+            var channel = server.Channels.Find(sChID => sChID.ChannelID == chID);
+            
+            if (channel == null)
+            {
+                return NotFound();
+            }
+
+            return await GetMessage(chID);
+
         }
 
         // PUT: api/Servers/5
@@ -162,7 +184,7 @@ namespace DiscordCloneAPI.Controllers
         }
 
         [HttpPatch("{ServerID}")]
-        public async Task<IActionResult> PatchServer([FromQuery(Name ="UserID"), SwaggerParameter(Required = true)]long UserID, long ServerID, PATCHServer patchServer)
+        public async Task<IActionResult> PatchServer([FromQuery(Name ="UserID"), SwaggerParameter(Required = true)]long UserID, string ServerID, PATCHServer patchServer)
         {
             if (!ServerExists(patchServer.ServerID)) { 
                 return BadRequest(); 
@@ -181,12 +203,12 @@ namespace DiscordCloneAPI.Controllers
             {
                 server.OwnerID = patchServer.OwnerID;
             }
-            
+            //Server Name changed
             if (patchServer.ServerName != null)
             {
                 server.ServerName = patchServer.ServerName;
             }
-
+            //Server Icon changed
             if (patchServer.ServerIcon != null)
             {
                 server.ServerIcon = patchServer.ServerIcon;
@@ -210,8 +232,8 @@ namespace DiscordCloneAPI.Controllers
         }
 
         // DELETE: api/Servers/5
-        [HttpDelete/*("{id}")*/]
-        public async Task<IActionResult> DeleteServer()
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteServer(string id)
         {
             //var server = await _context.Servers.FindAsync(id);
             //if (server == null)
@@ -232,6 +254,18 @@ namespace DiscordCloneAPI.Controllers
         private bool ServerExists(string id)
         {
             return _context.Servers.Any(e => e.ServerID.Equals(id));
+        }
+
+        private async Task<ActionResult<IEnumerable<Message>>> GetMessage(string chID)
+        {
+            var messages = _mssgContext.Messages.Where(e => e.ChannelID == chID);
+
+            if (messages == null)
+            {
+                return NotFound();
+            }
+
+            return messages.ToList<Message>();
         }
     }
 }
