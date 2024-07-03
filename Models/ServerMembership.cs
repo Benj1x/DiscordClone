@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace Models
 {
-    [PrimaryKey(nameof(RelationID))]
+    [PrimaryKey(nameof(UserID), nameof(ServerID))]
     public class ServerMembership
     {
-        public string RelationID { get; set; }
+        [ForeignKey(nameof(UserID))]
         public string UserID { get; set; }
-        //[ForeignKey(nameof(ServerID))]
+        [ForeignKey(nameof(ServerID))]
         public string ServerID { get; set; }
     }
 }

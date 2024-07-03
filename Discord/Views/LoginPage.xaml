@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Discord.Views.LoginPage"
+             Title="LoginPage">
+    <ScrollView>
+        <VerticalStackLayout 
+            Spacing="25" 
+            Padding="30,0" 
+            VerticalOptions="Center">
+
+            <Label 
+                Text="Welcome back!"
+                SemanticProperties.HeadingLevel="Level1"
+                FontSize="26"
+                HorizontalOptions="Center" />
+
+            <Label 
+                Text="I'm so excited to see you again!"
+                SemanticProperties.HeadingLevel="Level1"
+                FontSize="20"
+                HorizontalOptions="Center" />
+
+            <Entry IsPassword="False"
+                   IsTextPredictionEnabled="False"
+                   IsSpellCheckEnabled="False"
+                   TextChanged="OnEmailTextChanged"
+                   Placeholder="email+example@email.com"></Entry>
+            <Entry IsPassword="True"
+                   IsTextPredictionEnabled="False"
+                   IsSpellCheckEnabled="False"
+                   TextChanged="OnPasswordTextChanged"
+                   Placeholder="Password"></Entry>
+            <Label 
+            Text="Forgot your password? :("
+             SemanticProperties.HeadingLevel="Level1"
+             FontSize="20"
+                TextColor="Blue"
+             HorizontalOptions="Center" >
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer
+             Command="{Binding TapCommand}"/>
+                </Label.GestureRecognizers>
+
+            </Label>
+            <Button 
+                x:Name="LogInButton"
+                Text="Log In"
+                SemanticProperties.Hint="Log In"
+                Clicked="OnLogInClicked"
+                HorizontalOptions="Center"
+                IsEnabled="True"/>
+            <Label 
+                x:Name="ErrorLbl"
+            Text="Oh no! I don't have any records of that user! :("
+            SemanticProperties.HeadingLevel="Level1"
+            FontSize="20"
+                IsVisible="false"
+                TextColor="Red"
+            HorizontalOptions="Center" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

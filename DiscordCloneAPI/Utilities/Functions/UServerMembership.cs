@@ -78,8 +78,6 @@ namespace DiscordCloneAPI.Utilities.Functions
         {
             Random random = new Random();
 
-            serverMembership.RelationID = Guid.NewGuid().ToString("N");
-
             if (ServerMembershipExists(serverMembership.UserID, serverMembership.ServerID))
             {
                 return false;
@@ -91,21 +89,11 @@ namespace DiscordCloneAPI.Utilities.Functions
             } 
             catch (Exception ex)
             {
-                if (ServerMembershipIDExists(serverMembership.RelationID))
-                {
-                    while (ServerMembershipIDExists(serverMembership.RelationID))
-                    {
-                        _context.Memberships.Remove(serverMembership);
-                        serverMembership.RelationID = Guid.NewGuid().ToString("N");
-                        _context.Memberships.Add(serverMembership);
-                    }
+                
                     _context.Memberships.Add(serverMembership);
                     await _context.SaveChangesAsync();
-                }
-                else
-                {
-                    throw;
-                }
+               
+                
             }
             await _context.SaveChangesAsync();
 
@@ -148,15 +136,6 @@ namespace DiscordCloneAPI.Utilities.Functions
             return true; //Success 
         }
 
-        /// <summary>
-        /// <c>ServerMembershipIDExists</c> Checks if a relation ID already exists
-        /// </summary>
-        /// <returns>true if successful, user wasn't found in the server</returns>
-        /// <seealso cref="ServerMembershipExists"/>
-        private bool ServerMembershipIDExists(string RelationID)
-        {
-            return _context.Memberships.Any(e => e.RelationID.Equals(RelationID));
-        }
         /// <summary>
         /// <c>ServerMembershipExists</c> Checks if a user is already in a server
         /// </summary>

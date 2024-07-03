@@ -131,7 +131,7 @@ namespace DiscordCloneAPI.Controllers
             //Placeholder--------------------------------
             //UserAuthToken auth = new();
             //-------------------------------------------
-            string auth = "Authenticated";
+            string auth = $"Authenticated\n{user.UserID}";
             return auth;
         }
 

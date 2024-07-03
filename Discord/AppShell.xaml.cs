@@ -14,6 +14,7 @@
             The first parameter is the string name of the URI you want to register, in this case the resolved name is "NotePage".
             The second parameter is the type of page to load when "NotePage" is navigated to.*/
             Routing.RegisterRoute(nameof(Views.NotePage), typeof(Views.NotePage));
+            Routing.RegisterRoute("allmessagespage", typeof(Views.AllMessagesPage));
         }
     }
 }

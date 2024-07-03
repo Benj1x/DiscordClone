@@ -30,9 +30,9 @@ namespace DiscordCloneAPI.Controllers
 
         // GET: api/ServerMemberships/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ServerMembership>> GetServerMembership(long id)
+        public async Task<ActionResult<IEnumerable<ServerMembership>>> GetServerMembership(string id)
         {
-            var serverMembership = await _context.Memberships.FindAsync(id);
+            var serverMembership = _context.Memberships.Where(ms => ms.UserID.Equals(id)).ToList();
 
             if (serverMembership == null)
             {
@@ -45,7 +45,7 @@ namespace DiscordCloneAPI.Controllers
         // PUT: api/ServerMemberships/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         //[HttpPut("{id}")] Probably won't need this
-        //public async Task<IActionResult> PutServerMembership(long id, ServerMembership serverMembership)
+        //public async Task<IActionResult> PutServerMembership(string id, ServerMembership serverMembership)
         //{
         //    if (id != serverMembership.RelationID)
         //    {
@@ -78,17 +78,23 @@ namespace DiscordCloneAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<ServerMembership>> PostServerMembership(ServerMembership serverMembership)
         {
+            //Check that both the user and server exists too
+
+            if (ServerMembershipExists(serverMembership.UserID, serverMembership.ServerID))
+            {
+                return Conflict();
+            }
             _context.Memberships.Add(serverMembership);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetServerMembership", new { id = serverMembership.RelationID }, serverMembership);
+            return CreatedAtAction("GetServerMembership", new { id = serverMembership.UserID, serverMembership.ServerID }, serverMembership);
         }
 
         // DELETE: api/ServerMemberships/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteServerMembership(long id)
+        [HttpDelete("{UserID}")]
+        public async Task<IActionResult> DeleteServerMembership(string UserID, string serverID)
         {
-            var serverMembership = await _context.Memberships.FindAsync(id);
+            var serverMembership = await _context.Memberships.FindAsync(UserID, serverID);
             if (serverMembership == null)
             {
                 return NotFound();
@@ -100,9 +106,14 @@ namespace DiscordCloneAPI.Controllers
             return NoContent();
         }
 
-        private bool ServerMembershipExists(long id)
+        /// <summary>
+        /// <c>ServerMembershipExists</c> Checks if a user is already in a server
+        /// </summary>
+        /// <returns>true if found in the server, false if they weren't found in the server</returns>
+        private bool ServerMembershipExists(string userID, string serverID)
         {
-            return _context.Memberships.Any(e => e.RelationID.Equals(id));
+            //If any relation contains the UserID && ServerID
+            return _context.Memberships.Any(e => e.UserID.Equals(userID) && e.ServerID.Equals(serverID));
         }
     }
 }

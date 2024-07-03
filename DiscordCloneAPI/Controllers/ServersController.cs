@@ -174,7 +174,6 @@ namespace DiscordCloneAPI.Controllers
             ServerMembership serverMembership = new ServerMembership();
             serverMembership.ServerID = server.ServerID;
             serverMembership.UserID = server.OwnerID;
-            serverMembership.RelationID = "";
 
             if (!await _uServerMembership.PostServerMembership(serverMembership))
             {
