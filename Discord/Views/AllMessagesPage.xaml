@@ -3,27 +3,28 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModels="clr-namespace:Discord.ViewModels"
              x:Class="Discord.Views.AllMessagesPage"
+             Title="Discord"
              NavigatedTo="ContentPage_NavigatedTo">
-
     <ContentPage.BindingContext>
         <viewModels:MainViewModel />
     </ContentPage.BindingContext>
     <!-- Add an item to the toolbar -->
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add" Command="{Binding DeleteCommand}" IconImageSource="{FontImage Glyph='+', Color=White, Size=22}" />
+        <ToolbarItem Text="Add" Command="{Binding NewCommand}" IconImageSource="{FontImage Glyph='+', Color=White, Size=22}" />
     </ContentPage.ToolbarItems>
 
     <HorizontalStackLayout>
         <CollectionView x:Name="serversCollection"
             ItemsSource="{Binding AllServerIcons}"
             BackgroundColor="{Binding myServersBackgroundColor}"
-            MinimumWidthRequest="72"            
+            MinimumWidthRequest="256"
+            MaximumWidthRequest="256"  
             Margin="0"
             SelectionMode="Single">
 
             <!-- Designate how the collection of items are laid out -->
             <CollectionView.ItemsLayout>
-                <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="8" />
             </CollectionView.ItemsLayout>
 
             <!-- Define the appearance of each item in the list -->
