@@ -6,11 +6,12 @@ using System.Windows.Input;
 
 namespace Discord.ViewModels;
 
-internal class ChatViewModel : IQueryAttributable
+internal class MainViewModel : IQueryAttributable
 {
     public ObservableCollection<ViewModels.MessageViewModel> AllMessages { get; }
-    public ICommand NewCommand { get; }
-    public ICommand SelectMessageCommand { get; }
+    public ObservableCollection<ViewModels.ServerSidebarViewModel> AllServerIcons { get; set; }
+    public List<ServerSidebarViewModel> Servers { get; set; } = new List<ServerSidebarViewModel>();
+    
     Entry entry = new Entry { Placeholder = "Enter text here" };
 
     public Color myServersBackgroundColor { get; set; } = Color.FromRgba(30, 31, 34, 255);
@@ -22,14 +23,38 @@ internal class ChatViewModel : IQueryAttributable
     
     public Color myMembersBackgroundColor { get; set; } = Color.FromRgba(43, 45, 49, 255);
 
+    //public ICommand NewCommand { get; }
+    //public ICommand SelectMessageCommand { get; }
     //public ICommand OnEntryTextChanged { get; }
+    public ICommand DeleteCommand { get; }
 
-    public ChatViewModel()
+    public MainViewModel()
     {
         AllMessages = new ObservableCollection<ViewModels.MessageViewModel>(Models.Message.LoadAll().Select(n => new MessageViewModel(n)));
-        NewCommand = new AsyncRelayCommand(NewNoteAsync);
-        SelectMessageCommand = new AsyncRelayCommand<ViewModels.MessageViewModel>(SelectMessageAsync);
+        //AllServerIcons = new ObservableCollection<ServerSidebarViewModel>(ServerSidebar.LoadAllAsync().Result.ToList().Select(n => new ServerSidebarViewModel(n)));
+        test();
+        Task.Delay(5000).Wait();
+        Console.WriteLine("dwadaw");
+        //NewCommand = new AsyncRelayCommand(NewNoteAsync);
+        //SelectMessageCommand = new AsyncRelayCommand<ViewModels.MessageViewModel>(SelectMessageAsync);
+        DeleteCommand = new AsyncRelayCommand(Delete);
+        
+    }
 
+    private async Task Delete()
+    {
+        await Shell.Current.GoToAsync($"..?deleted=test");
+
+    }
+    private async Task test()
+    {
+        var serverSidebars = await ServerSidebar.GetAllAsync();
+        AllServerIcons = new ObservableCollection<ServerSidebarViewModel>(serverSidebars.ToList().Select(n => new ServerSidebarViewModel(n)));
+        foreach (var item in AllServerIcons)
+        {
+            Servers.Add(item);
+            item.Reload();
+        }
     }
 
     private async Task NewNoteAsync()
@@ -70,23 +95,34 @@ internal class ChatViewModel : IQueryAttributable
                 AllMessages.Remove(matchedMessage);
             }
         }
-        else if (query.ContainsKey("saved"))
+        if (query.ContainsKey("joined"))
         {
-            string matchedId = query["saved"].ToString();
-            MessageViewModel matchedMessage = AllMessages.Where((n) => n.Identifier == matchedId).FirstOrDefault();
+            string serverID = query["joined"].ToString();
+            ServerSidebarViewModel matchedServer = AllServerIcons.Where((n) => n.ServerID == serverID).FirstOrDefault();
 
             // If note is found, update it
-            if (matchedMessage != null) 
+            if (matchedServer != null) 
             {
-                matchedMessage.Reload();
-                AllMessages.Move(AllMessages.IndexOf(matchedMessage), 0);
+                matchedServer.Reload();
+                AllServerIcons.Move(AllServerIcons.IndexOf(matchedServer), 0);
             }
             else// If note isn't found, it's new; add it.
             {
-                AllMessages.Insert(0, new MessageViewModel(Models.Message.Load(matchedId)));
+                //AllServerIcons.Insert(0, new ServerSidebarViewModel(Models.ServerSidebar.Load(serverID)));
             }
-            
-
         }
+        if (query.ContainsKey("left"))
+        {
+            string messageId = query["left"].ToString();
+            ServerSidebarViewModel matchedServer = AllServerIcons.Where((n) => n.ServerID == messageId).FirstOrDefault();
+
+            // If note exists, delete it
+            if (matchedServer != null)
+            {
+                AllServerIcons.Remove(matchedServer);
+            }
+        }
+
+
     }
 }

@@ -2,5 +2,6 @@
 {
     public class UserAuthToken
     {
+        string token = "AToken";
     }
 }

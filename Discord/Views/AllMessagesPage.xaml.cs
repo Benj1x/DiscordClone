@@ -8,7 +8,6 @@ namespace Discord.Views;
 
 public partial class AllMessagesPage : ContentPage
 {
-    APIEndpoints _api = new APIEndpoints();
     public AllMessagesPage()
     {
         InitializeComponent();
@@ -17,16 +16,14 @@ public partial class AllMessagesPage : ContentPage
     }
     private async Task LoadSideBarAsync()
     {
-        
-        var test = await _api.GetMyServers();
-        if (test == null || !test.IsSuccessStatusCode)
-        {
-            return;
-        }
-        var test2 = test.Content.ReadAsStringAsync();
-        //byte[] imageBytes = Convert.FromBase64String(base64String);
+        //List<string> test = await APIEndpoints.GetMyServers();
+        //var servers = await APIEndpoints.GetServers(test);
+
+        //Console.WriteLine("daw");
+
+        //byte[46875] imageBytes = servers[].ServerIcon;
         ////ImageSourceConverter img = new ImageSourceConverter();
-        
+        //46875 Bytes
 
         //Image image;
         //// Create memory stream from byte array
@@ -37,7 +34,7 @@ public partial class AllMessagesPage : ContentPage
         //    ImageSource imageSource = new ImageSource;
         //    Testimg.Source = ImageSource.FromStream(ms.BeginRead());
         //}
-        
+
     }
     private void ContentPage_NavigatedTo(object sender, NavigatedToEventArgs e)
     {

@@ -15,5 +15,6 @@ namespace Models
         public string UserID { get; set; }
         [ForeignKey(nameof(ServerID))]
         public string ServerID { get; set; }
+        //Add entry date
     }
 }

@@ -50,6 +50,25 @@ namespace DiscordCloneAPI.Controllers
 
             return server;
         }
+
+        // GET: api/Servers/List
+        [HttpPost("List")]
+        public async Task<ActionResult<IEnumerable<Server>>> GetServers(List<string> ids)
+        {
+            List<Server> Servers = new List<Server>();
+            foreach (var id in ids)
+            {
+                Servers.Add(await _context.Servers.Include(s => s.Channels)
+                               .FirstOrDefaultAsync(s => s.ServerID == id)); 
+            }
+            if (Servers.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return Servers;
+        }
+
         // GET: api/Servers/id/channels/chID
         [HttpGet("{id}/channels{chID}")]
         public async Task<ActionResult<IEnumerable<Message>>> GetChannelMessages(string id, string chID)

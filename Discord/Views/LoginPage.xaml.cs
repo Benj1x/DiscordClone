@@ -29,11 +29,13 @@ public partial class LoginPage : ContentPage
         LogInButton.IsEnabled = false;
         //var _res = await _api.TryLogin(email, password);
         var _res = await _api.TryLogin("email@email.com", "dwasdaw");
+
         if (_res == null || !_res.IsSuccessStatusCode)
         {
             ErrorLbl.IsVisible = false;
             //report error
             LogInButton.IsEnabled = true;
+            return;
         }
         var authSingleton = AuthSingleton.GetAuthSingleton();
         string tempstring = await _res.Content.ReadAsStringAsync();

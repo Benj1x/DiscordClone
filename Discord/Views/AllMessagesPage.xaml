@@ -6,24 +6,20 @@
              NavigatedTo="ContentPage_NavigatedTo">
 
     <ContentPage.BindingContext>
-        <viewModels:ChatViewModel />
+        <viewModels:MainViewModel />
     </ContentPage.BindingContext>
     <!-- Add an item to the toolbar -->
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add" Command="{Binding NewCommand}" IconImageSource="{FontImage Glyph='+', Color=White, Size=22}" />
+        <ToolbarItem Text="Add" Command="{Binding DeleteCommand}" IconImageSource="{FontImage Glyph='+', Color=White, Size=22}" />
     </ContentPage.ToolbarItems>
 
     <HorizontalStackLayout>
-        <Image
-            x:Name="Testimg"></Image>
         <CollectionView x:Name="serversCollection"
-            ItemsSource="{Binding Servers}"
+            ItemsSource="{Binding AllServerIcons}"
             BackgroundColor="{Binding myServersBackgroundColor}"
             MinimumWidthRequest="72"            
             Margin="0"
-            SelectionMode="Single"
-            SelectionChangedCommand="{Binding SelectMessageCommand}"
-            SelectionChangedCommandParameter="{Binding Source={RelativeSource Self}, Path=SelectedItem}">
+            SelectionMode="Single">
 
             <!-- Designate how the collection of items are laid out -->
             <CollectionView.ItemsLayout>
@@ -34,7 +30,8 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <StackLayout>
-                        <Button Text="Add" ImageSource="{FontImage Glyph='+', Color=White, Size=55}" />
+                        <ImageButton Source="{Binding ServerIcon}" ToolTipProperties.Text="{Binding ServerName}"></ImageButton>
+                        <!--<Button ToolTipProperties.Text="dwa" ImageSource="{Binding ServerIcon}" />-->
                         <!--Label Text="{Binding Date}" FontSize="14" TextColor="Silver"/-->
                     </StackLayout>
                 </DataTemplate>
@@ -45,9 +42,7 @@
             MinimumWidthRequest="240"            
             Margin="0"
             SelectionMode="Single"
-            BackgroundColor="{Binding myChannelsBackgroundColor}"
-            SelectionChangedCommand="{Binding SelectMessageCommand}"
-            SelectionChangedCommandParameter="{Binding Source={RelativeSource Self}, Path=SelectedItem}">
+            BackgroundColor="{Binding myChannelsBackgroundColor}">
 
             <!-- Designate how the collection of items are laid out -->
             <CollectionView.ItemsLayout>
@@ -58,7 +53,8 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <StackLayout>
-                        <Button Text="Add" ImageSource="{FontImage Glyph='+', Color=White, Size=22}" />
+                        <Button ImageSource="{FontImage Glyph='+', Size=22, Color=White}"
+                                ToolTipProperties.Text="dwa"/>
                         <!--Label Text="{Binding Date}" FontSize="14" TextColor="Silver"/-->
                     </StackLayout>
                 </DataTemplate>
