@@ -7,7 +7,6 @@ namespace Discord.ViewModels;
 internal class MessageViewModel : ObservableObject, IQueryAttributable
 {
     private Models.Message _message;
-    private Models.ServerSidebar _sidebar;
     public DateTime Date => _message.Date;
     public string Identifier => _message.Filename;
     public ICommand SaveCommand { get; private set; }
@@ -57,7 +56,7 @@ internal class MessageViewModel : ObservableObject, IQueryAttributable
             _message = Models.Message.Load(query["load"].ToString());
             RefreshProperties();
         }
-        if (query.ContainsKey("JoinedNewServer"))
+        if (query.ContainsKey("ChangedView"))
         {
             //_sidebar = Models.ServerSidebar.JoinedNewServer(query["load"].ToString());
             RefreshProperties();

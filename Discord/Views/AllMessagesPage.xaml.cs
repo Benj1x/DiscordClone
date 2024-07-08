@@ -17,4 +17,9 @@ public partial class AllMessagesPage : ContentPage
     {
         chatCollection.SelectedItem = null;
     }
+
+    private void ImageButton_Clicked(object sender, EventArgs e)
+    {
+
+    }
 }

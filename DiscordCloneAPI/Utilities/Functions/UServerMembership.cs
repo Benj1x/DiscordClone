@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using System;
 using System.Net;
 using System.Threading.Channels;
 using System.Web.Mvc;
@@ -57,17 +58,52 @@ namespace DiscordCloneAPI.Utilities.Functions
                     OwnerID = Guid.NewGuid().ToString("N"),
                     ServerName = $"Server{Guid.NewGuid().ToString("N")}",
                     FormServerIcon = null,
+                    Channels = GenerateRandomChannels(random.Next(1, 5)), // Random number of channels
                     AFKChannelID = Guid.NewGuid().ToString("N"),
                     AFKTimeout = random.Next(1, 10000),
                     ServerRegion = $"Region{Guid.NewGuid().ToString("N")}"
                     
                 };
-                server.Channels.Add(new Models.Channel() { ChannelID = channel.ChannelID, ChannelName = "General"});
+                //server.Channels.Add(new Models.Channel() { ChannelID = channel.ChannelID, ChannelName = "General"});
                 //server.Channels.Add(channel);
                 servers.Add(server);
             }
 
             return servers;
+        }
+        private static List<Models.Channel> GenerateRandomChannels(int count)
+        {
+            string temp = string.Empty;
+            var random = new Random();
+            var channels = new List<Models.Channel>();
+            for (int i = 0; i < count; i++)
+            {
+                temp = Guid.NewGuid().ToString("N");
+                channels.Add(new Models.Channel
+                {
+                    ChannelID = temp,
+                    ChannelName = $"Channel{Guid.NewGuid().ToString("N")}",
+                    Messages = GenerateRandomMessages(random.Next(1, 20), temp) // Random number of messages
+                });
+            }
+
+            return channels;
+        }
+        private static List<Message> GenerateRandomMessages(int count, string Channel)
+        {
+            var messages = new List<Message>();
+            for (int i = 0; i < count; i++)
+            {
+                messages.Add(new Message
+                {
+                    ChannelID = Channel,
+                    OwnerID = $"User{Guid.NewGuid().ToString("N")}",
+                    MessageID = Guid.NewGuid().ToString("N"),
+                    MessageContent = $"Content{Guid.NewGuid().ToString("N")}"
+                });
+            }
+
+            return messages;
         }
 
         /// <summary>

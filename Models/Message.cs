@@ -13,7 +13,7 @@ namespace Models
     public class Message
     {
         public string ChannelID {  get; set; }
-        public string OwnerID { get; set; }
+        public string SenderID { get; set; }
         public string MessageID { get; set; } //Need something more unique as the PK?? (discord uses ((channelid, bucket), messageid)
         public string? MessageContent { get; set; }
         //byte should be some file

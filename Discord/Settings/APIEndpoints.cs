@@ -18,6 +18,25 @@ namespace Discord.Settings
             request.Content = content;
             return await client.SendAsync(request);
         }
+
+        public static async Task<User> GetUser(string uID)
+        {
+            var client = new HttpClient();
+            var request = new HttpRequestMessage(HttpMethod.Get, _endpoint+"Users/"+$"{uID}");
+            request.Headers.Add("accept", "text/plain");
+            var response = await client.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+            var responseStream = await response.Content.ReadAsStreamAsync();
+            User? user = await JsonSerializer.DeserializeAsync<User>(responseStream, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+
+            //if (user == null)
+            //{
+            //    return 
+            //}
+
+            return user;
+        }
+
         public static async Task<List<string>> GetMyServers()
         {
             string id = AuthSingleton.GetAuthSingleton().GetUserID();
@@ -79,6 +98,19 @@ namespace Discord.Settings
 
             return servers;
         }
+
+        public static async Task<Server> GetServer(string serverID)
+        {
+            var client = new HttpClient();
+            var request = new HttpRequestMessage(HttpMethod.Get, _endpoint + "Servers/" + $"{serverID}");
+            request.Headers.Add("accept", "text/plain");
+            var response = await client.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+            var responseStream = await response.Content.ReadAsStreamAsync();
+            Server server = await JsonSerializer.DeserializeAsync<Server>(responseStream, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+            return server;
+        }
+
     }
 
 }

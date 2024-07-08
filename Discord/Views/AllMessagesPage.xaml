@@ -8,6 +8,7 @@
     <ContentPage.BindingContext>
         <viewModels:MainViewModel />
     </ContentPage.BindingContext>
+    
     <!-- Add an item to the toolbar -->
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Add" Command="{Binding NewCommand}" IconImageSource="{FontImage Glyph='+', Color=White, Size=22}" />
@@ -17,8 +18,8 @@
         <CollectionView x:Name="serversCollection"
             ItemsSource="{Binding AllServerIcons}"
             BackgroundColor="{Binding myServersBackgroundColor}"
-            MinimumWidthRequest="256"
-            MaximumWidthRequest="256"  
+            MinimumWidthRequest="75"
+            MaximumWidthRequest="75"  
             Margin="0"
             SelectionMode="Single">
 
@@ -31,9 +32,7 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <StackLayout>
-                        <ImageButton Source="{Binding ServerIcon}" ToolTipProperties.Text="{Binding ServerName}"></ImageButton>
-                        <!--<Button ToolTipProperties.Text="dwa" ImageSource="{Binding ServerIcon}" />-->
-                        <!--Label Text="{Binding Date}" FontSize="14" TextColor="Silver"/-->
+                        <ImageButton Source="{Binding ServerIcon}" Command="{Binding ClickServerCommand}" CommandParameter="{Binding ServerID}" Aspect="AspectFit" Padding="0" CornerRadius="45" MaximumHeightRequest="48" MaximumWidthRequest="48" MinimumHeightRequest="48" MinimumWidthRequest="48" ToolTipProperties.Text="{Binding ServerName}"></ImageButton>
                     </StackLayout>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

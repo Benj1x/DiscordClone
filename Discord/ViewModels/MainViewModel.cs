@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Discord.Models;
+using Discord.Settings;
 using System;
 using System.Collections.ObjectModel;
 using System.Text;
@@ -24,7 +25,6 @@ internal class MainViewModel : IQueryAttributable
     
     public Color myMembersBackgroundColor { get; set; } = Color.FromRgba(43, 45, 49, 255);
 
-    //public ICommand NewCommand { get; }
     //public ICommand SelectMessageCommand { get; }
     //public ICommand OnEntryTextChanged { get; }
     public ICommand DeleteCommand { get; }
@@ -33,7 +33,7 @@ internal class MainViewModel : IQueryAttributable
     {
         //Delete
         //AllNotes = new ObservableCollection<ViewModels.NoteViewModel>(Models.Note.LoadAll().Select(n => new NoteViewModel(n)));
-        //NewCommand = new AsyncRelayCommand(NewNoteAsync);
+
         //SelectNoteCommand = new AsyncRelayCommand<ViewModels.NoteViewModel>(SelectNoteAsync);
         //
         AllMessages = new ObservableCollection<ViewModels.MessageViewModel>(Models.Message.LoadAll().Select(n => new MessageViewModel(n)));
@@ -46,6 +46,8 @@ internal class MainViewModel : IQueryAttributable
         DeleteCommand = new AsyncRelayCommand(Delete);
         
     }
+
+
     /*private async Task NewNoteAsync()
     {
         await Shell.Current.GoToAsync(nameof(Views.NotePage));
@@ -84,7 +86,7 @@ internal class MainViewModel : IQueryAttributable
                 AllNotes.Insert(0, new NoteViewModel(Models.Note.Load(noteId)));
         }
     }*/
-    
+
     private async Task Delete()
     {
         await Shell.Current.GoToAsync($"..?deleted=test");
@@ -96,7 +98,6 @@ internal class MainViewModel : IQueryAttributable
         AllServerIcons = new ObservableCollection<ServerSidebarViewModel>(serverSidebars.ToList().Select(n => new ServerSidebarViewModel(n)));
         foreach (var item in AllServerIcons)
         {
-            AllServerIcons.Add(item);
             item.Reload();
         }
     }
@@ -130,7 +131,7 @@ internal class MainViewModel : IQueryAttributable
     {
         if (query.ContainsKey("load"))
         {
-            var content = query["load"].ToString().Split('+');
+            var content = query["load"].ToString().Split('_');
             string serverID = content[0];
             string serverName = content[1];
             byte[] img = Convert.FromBase64String(content[2]);

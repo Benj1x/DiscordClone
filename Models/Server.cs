@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 using System.Linq;
@@ -22,7 +23,8 @@ namespace Models
         public IFormFile? FormServerIcon { get; set; }
         public byte[]? ServerIcon { get; set; }
         //public Int64[]? Admins { get; set; } = null;
-        public List<Channel>? Channels { get; set; } = new List<Channel>();
+        public List<Channel>? Channels { get; set; } = new List<Channel>();//One to many relation in EF
+        public List<User> Members { get; set; } = new List<User>();
 
         public string? AFKChannelID { get; set; } = null;
         public int? AFKTimeout { get; set; } = null;
@@ -35,6 +37,8 @@ namespace Models
     {
         public string ChannelID { get; set; }
         public string ChannelName { get; set; }
+        public List<Message>? Messages { get; set; } = new List<Message>();
+
     }
 }
 

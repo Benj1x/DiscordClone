@@ -39,7 +39,8 @@ namespace DiscordCloneAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Server>> GetServer(string id)
         {
-            var server = await _context.Servers.Include(s => s.Channels)
+            var server = await _context.Servers.Include(c => c.Channels)
+                .ThenInclude(m => m.Messages)
                                .FirstOrDefaultAsync(s => s.ServerID == id);
 
             if (server == null)

@@ -30,7 +30,7 @@ namespace DiscordCloneAPI.Controllers
 
         // GET: api/Messages/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Message>> GetMessage(long id)
+        public async Task<ActionResult<Message>> GetMessage(string id)
         {
             var message = await _context.Messages.FindAsync(id);
 

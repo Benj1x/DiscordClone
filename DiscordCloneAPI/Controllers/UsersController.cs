@@ -39,6 +39,11 @@ namespace DiscordCloneAPI.Controllers
                 return NotFound();
             }
 
+            //todo Set to null instead
+            user.PhoneNumber = 0;
+            user.Email = "";
+            user.Password = "";
+
             return user;
         }
 
